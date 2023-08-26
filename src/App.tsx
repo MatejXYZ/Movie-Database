@@ -1,15 +1,18 @@
-import { ChakraProvider, theme } from "@chakra-ui/react";
+import { ChakraProvider, HStack, theme } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Axios from "axios";
 import { Suspense, lazy } from "react";
 import {
-  createBrowserRouter,
+  BrowserRouter,
   Navigate,
-  RouterProvider,
+  NavLink,
+  Route,
+  Routes,
 } from "react-router-dom";
 
 import { API_ENDPOINT, API_KEY } from "./constants";
 import FullscreenSpinner from "./Components/FullscreenSpinner";
+import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { keepPreviousData: true } },
@@ -21,27 +24,52 @@ Axios.defaults.params = { apikey: API_KEY };
 
 const List = lazy(() => import("./Screens/List"));
 const Detail = lazy(() => import("./Screens/Detail"));
+const Favourites = lazy(() => import("./Screens/Favourites"));
 
-const router = createBrowserRouter([
-  {
-    path: "/:id",
-    element: <Detail />,
-  },
-  {
-    path: "/",
-    element: <List />,
-  },
-  {
-    path: "*",
-    element: <Navigate to={"/"} />,
-  },
-]);
+const routes = {
+  detail: "/:id",
+  favourites: "favourites",
+  search: "/",
+};
 
 export const App = () => (
   <ChakraProvider theme={theme}>
     <QueryClientProvider client={queryClient}>
       <Suspense fallback={<FullscreenSpinner />}>
-        <RouterProvider router={router} />
+        <RecoilRoot>
+          <BrowserRouter>
+            <HStack>
+              <NavLink
+                style={({ isActive, isPending }) => {
+                  return {
+                    fontWeight: isActive ? "bold" : "",
+                    color: isPending ? "red" : "black",
+                  };
+                }}
+                to={routes.favourites}
+              >
+                favourites
+              </NavLink>
+              <NavLink
+                style={({ isActive, isPending }) => {
+                  return {
+                    fontWeight: isActive ? "bold" : "",
+                    color: isPending ? "red" : "black",
+                  };
+                }}
+                to={routes.search}
+              >
+                search
+              </NavLink>
+            </HStack>
+            <Routes>
+              <Route path={routes.detail} element={<Detail />} />
+              <Route path={routes.favourites} element={<Favourites />} />
+              <Route path={routes.search} element={<List />} />
+              <Route path="*" element={<Navigate to={routes.search} />} />
+            </Routes>
+          </BrowserRouter>
+        </RecoilRoot>
       </Suspense>
     </QueryClientProvider>
   </ChakraProvider>

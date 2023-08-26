@@ -1,61 +1,19 @@
 import {
   Box,
   Button,
-  Flex,
   HStack,
   Input,
   Spinner,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import {
-  FC,
-  PropsWithChildren,
-  startTransition,
-  useMemo,
-  useState,
-} from "react";
+import { useMemo, useState } from "react";
+import type { SearchResponse as Response } from "../api/types";
+
 import { useTitleSearch } from "../api/queries/search-parameter";
-import { useNavigate } from "react-router-dom";
+import MoviePreview from "../Components/MoviePreview";
 
 const PAGE_SIZE = 10;
-
-type Result = {
-  Title: string;
-  Year: string;
-  imdbID: string;
-  Type: string;
-  Poster: string;
-};
-
-type Search = {
-  Search: Result[];
-  totalResults: string;
-  Response: string;
-};
-
-const ResultItem: FC<Result & PropsWithChildren> = ({ children, imdbID }) => {
-  const navigate = useNavigate();
-
-  return (
-    <Flex
-      w="100px"
-      h="100px"
-      bg="seagreen"
-      rounded="5px"
-      justify="center"
-      align="center"
-      cursor="pointer"
-      onClick={() => {
-        startTransition(() => {
-          navigate(`/${imdbID}`);
-        });
-      }}
-    >
-      {children}
-    </Flex>
-  );
-};
 
 const List = () => {
   const [text, setText] = useState("");
@@ -66,7 +24,7 @@ const List = () => {
     data: searchData,
     isLoading,
     isFetching,
-  } = useTitleSearch<{ data: Search }>(
+  } = useTitleSearch<{ data: Response }>(
     { s: search, page },
     { query: { enabled: !!search } }
   );
@@ -106,7 +64,7 @@ const List = () => {
       ) : (
         <Wrap>
           {searchData?.data?.Search?.map((item) => (
-            <ResultItem {...item}>{item.Title}</ResultItem>
+            <MoviePreview {...item}>{item.Title}</MoviePreview>
           ))}
         </Wrap>
       )}

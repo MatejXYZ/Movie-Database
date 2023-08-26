@@ -3,39 +3,10 @@ import { useParams } from "react-router-dom";
 
 import { useGetId } from "../api/queries/id-parameter";
 import FullscreenSpinner from "../Components/FullscreenSpinner";
-
-type TDetail = {
-  Actors: string;
-  Awards: string;
-  BoxOffice: string;
-  Country: string;
-  DVD: string;
-  Director: string;
-  Genre: string;
-  Language: string;
-  Metascore: string;
-  Plot: string;
-  Poster: string;
-  Production: string;
-  Rated: string;
-  Ratings: string;
-  Released: string;
-  Response: "True" | "False";
-  Runtime: string;
-  Title: string;
-  Type: string;
-  Website: string;
-  Writer: string;
-  Year: string;
-  imdbID: string;
-  imdbRating: string;
-  imdbVotes: string;
-};
+import type { Detail as TDetail } from "../api/types";
 
 const Detail = () => {
   const { id } = useParams();
-
-  // if not found, display error with back button
 
   const {
     data: detail,
