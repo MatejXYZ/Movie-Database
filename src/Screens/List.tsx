@@ -8,8 +8,15 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { FC, PropsWithChildren, useMemo, useState } from "react";
+import {
+  FC,
+  PropsWithChildren,
+  startTransition,
+  useMemo,
+  useState,
+} from "react";
 import { useTitleSearch } from "../api/queries/search-parameter";
+import { useNavigate } from "react-router-dom";
 
 const PAGE_SIZE = 10;
 
@@ -27,7 +34,9 @@ type Search = {
   Response: string;
 };
 
-const ResultItem: FC<Result & PropsWithChildren> = ({ children }) => {
+const ResultItem: FC<Result & PropsWithChildren> = ({ children, imdbID }) => {
+  const navigate = useNavigate();
+
   return (
     <Flex
       w="100px"
@@ -36,6 +45,12 @@ const ResultItem: FC<Result & PropsWithChildren> = ({ children }) => {
       rounded="5px"
       justify="center"
       align="center"
+      cursor="pointer"
+      onClick={() => {
+        startTransition(() => {
+          navigate(`/${imdbID}`);
+        });
+      }}
     >
       {children}
     </Flex>
