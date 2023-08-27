@@ -13,7 +13,7 @@ import { API_ENDPOINT, API_KEY } from "./constants";
 export const routes = {
   detail: "/:id",
   favourites: "favourites",
-  search: "/",
+  search: "/search",
 };
 
 const queryClient = new QueryClient({

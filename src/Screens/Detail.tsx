@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from "react";
 import {
   Box,
+  Flex,
   Grid,
   GridItem,
   Icon,
@@ -67,9 +68,9 @@ const Detail = () => {
 
   if (isError || detail?.data.Response === "False")
     return (
-      <Box>
+      <Flex p="25px" justify="center">
         <Box>Movie not found</Box>
-      </Box>
+      </Flex>
     );
 
   return isLoading ? (
