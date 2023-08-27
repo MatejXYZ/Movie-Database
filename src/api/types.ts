@@ -26,7 +26,7 @@ export type Detail = {
   Poster: string;
   Production: string;
   Rated: string;
-  Ratings: string;
+  Ratings: { Source: string; Value: string }[];
   Released: string;
   Response: "True" | "False";
   Runtime: string;
@@ -38,4 +38,5 @@ export type Detail = {
   imdbID: string;
   imdbRating: string;
   imdbVotes: string;
+  totalSeasons?: string;
 };
