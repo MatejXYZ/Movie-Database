@@ -26,6 +26,8 @@ const List = () => {
   const [text, setText] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [isUserEditingPage, setIsUserEditingPage] = useState(false);
+  const [userPage, setUserPage] = useState(0);
 
   const {
     data: searchData,
@@ -50,10 +52,6 @@ const List = () => {
     [totalResults]
   );
 
-  const [isUserEditingPage, setIsUserEditingPage] = useState(false);
-
-  const [userPage, setUserPage] = useState(0);
-
   return (
     <VStack align="center" p="5">
       <HStack
@@ -63,6 +61,8 @@ const List = () => {
           e.preventDefault();
 
           setSearch(text);
+
+          setPage(1);
         }}
       >
         <Input
@@ -91,7 +91,9 @@ const List = () => {
           justifyContent="center"
         >
           {searchData?.data?.Search?.map((item) => (
-            <MoviePreview {...item}>{item.Title}</MoviePreview>
+            <MoviePreview key={item.imdbID} {...item}>
+              {item.Title}
+            </MoviePreview>
           ))}
         </Grid>
       )}
