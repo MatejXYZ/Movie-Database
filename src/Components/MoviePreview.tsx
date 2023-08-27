@@ -6,6 +6,7 @@ import { SearchResult } from "../api/types";
 import { useFavourites } from "../hook";
 
 import { ReactComponent as StarIcon } from "../assets/star.svg";
+import { routes } from "../App";
 
 type MoviePreviewProps = SearchResult &
   PropsWithChildren & { isFavourite?: boolean };
@@ -38,7 +39,7 @@ const MoviePreview: FC<MoviePreviewProps> = ({
         cursor="pointer"
         onClick={() => {
           startTransition(() => {
-            navigate(`/${imdbID}`);
+            navigate(`${routes.detail}/${imdbID}`);
           });
         }}
         position="relative"

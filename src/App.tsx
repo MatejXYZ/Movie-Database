@@ -10,11 +10,15 @@ import Menu from "./Components/Menu";
 
 import { API_ENDPOINT, API_KEY } from "./constants";
 
-export const routes = {
-  detail: "/:id",
-  favourites: "favourites",
-  search: "/search",
-};
+const baseRoute = "/Movie-Database";
+
+export const routes = Object.fromEntries(
+  Object.entries({
+    detail: "/detail",
+    favourites: "/favourites",
+    search: "/",
+  }).map(([key, value]) => [key, `${baseRoute}${value}`])
+);
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { keepPreviousData: true } },
@@ -36,7 +40,7 @@ export const App = () => (
           <BrowserRouter>
             <Menu />
             <Routes>
-              <Route path={routes.detail} element={<Detail />} />
+              <Route path={`${routes.detail}/:id`} element={<Detail />} />
               <Route path={routes.favourites} element={<Favourites />} />
               <Route path={routes.search} element={<List />} />
               <Route path="*" element={<Navigate to={routes.search} />} />
