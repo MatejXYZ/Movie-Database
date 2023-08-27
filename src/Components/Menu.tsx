@@ -5,7 +5,7 @@ import { routes } from "../App";
 
 const Menu = () => {
   return (
-    <HStack w="full" justify="center" bg="gray.200">
+    <HStack w="full" justify="center" bg="gray.200" spacing="none">
       {[
         { title: "Search", route: routes.search },
         { title: "Favourites", route: routes.favourites },
@@ -22,7 +22,7 @@ const Menu = () => {
           <Button
             h="full"
             rounded="0"
-            p="10px"
+            py="10px"
             w="150px"
             variant="ghost"
             fontWeight="inherit"

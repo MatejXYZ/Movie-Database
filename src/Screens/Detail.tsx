@@ -3,9 +3,9 @@ import {
   Box,
   Grid,
   GridItem,
-  HStack,
   Icon,
   Image,
+  Stack,
   VStack,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
@@ -38,8 +38,7 @@ const Detail = () => {
     { query: { enabled: !!id } }
   );
 
-  const { Poster, Title, Year, Runtime, Genre, Plot, Ratings, Type } =
-    detail?.data ?? {};
+  const { Poster, Title, Plot, Ratings, Type } = detail?.data ?? {};
 
   const renderRow: <T>(
     obj: T,
@@ -77,12 +76,14 @@ const Detail = () => {
     <FullscreenSpinner />
   ) : (
     <VStack p="25px" align="start">
-      <HStack position="relative">
+      <Stack direction={["column", null, "row"]} position="relative">
         <Box
           boxShadow="base"
           aspectRatio={2 / 3}
           overflow="hidden"
-          w={{ base: "full", xl: "500px" }}
+          minW={["250px", "300px"]}
+          w={["full", null, "500px"]}
+          maxW={["500px", null, "none"]}
         >
           <Image w="full" h="full" src={Poster} objectFit="cover" />
         </Box>
@@ -94,6 +95,7 @@ const Detail = () => {
           align="start"
         >
           <Box
+            w={["full", null, "auto"]}
             fontSize="32px"
             textAlign="center"
             fontWeight="bold"
@@ -101,20 +103,27 @@ const Detail = () => {
           >
             {Title}
           </Box>
-          <VStack align="start" spacing="0.5">
-            <Box lineHeight="1.15">{Type}</Box>
-            <Box lineHeight="1.15">{Year}</Box>
-            <Box lineHeight="1.15">{Genre}</Box>
-            <Box lineHeight="1.15">{Runtime}</Box>
-            <Grid gap="0.5" templateColumns="60px 1fr">
+          <VStack align="start">
+            {(["Year", "Genre", "Runtime"] as const).flatMap((item) => {
+              const value = detail.data[item];
+
+              return !value || value === "N/A" ? (
+                []
+              ) : (
+                <Box lineHeight="1">{value}</Box>
+              );
+            })}
+            <Grid templateColumns="70px 1fr">
               {(["Director", "Actors", "Writer"] as const).map((key) =>
                 renderDetailRow(key)
               )}
             </Grid>
-            <Box>{Plot}</Box>
+            <Box maxW="1000px" lineHeight="1">
+              {Plot}
+            </Box>
           </VStack>
-          <Box>
-            <Grid gap="0.5" templateColumns="120px 1fr">
+          <VStack align="start">
+            <Grid templateColumns="120px 1fr">
               {(["Country", "Language"] as const).map((key) =>
                 renderDetailRow(key)
               )}
@@ -122,14 +131,14 @@ const Detail = () => {
             </Grid>
             <VStack align="start" spacing="0">
               <Box>Ratings</Box>
-              <Grid gap="0.5" templateColumns="120px 1fr">
+              <Grid templateColumns="120px 1fr">
                 {Ratings?.map((item) => renderRow(item, "Value", item.Source))}
                 {(["Metascore", "imdbRating", "imdbVotes"] as const).map(
                   (item) => renderDetailRow(item)
                 )}
               </Grid>
             </VStack>
-          </Box>
+          </VStack>
         </VStack>
         <Box
           onClick={(e) => {
@@ -155,7 +164,7 @@ const Detail = () => {
             transition="fill 0.25s, stroke 0.25s, opacity 0.25s"
           />
         </Box>
-      </HStack>
+      </Stack>
     </VStack>
   );
 };
